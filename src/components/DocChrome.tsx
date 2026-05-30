@@ -30,6 +30,34 @@ export function LetterheadView({ cfg }: { cfg: LetterheadConfig }) {
   );
 }
 
+/**
+ * Robust liability disclaimer rendered as a small-font footer bar on the cover
+ * letter (screen + print). Protects both the platform (Precedent and its
+ * contributors) and the presenter (the individual or organization distributing
+ * the document), and states the informational/educational purpose. This is the
+ * load-bearing legal notice for a legislator-facing advocacy tool.
+ */
+export function CoverLetterDisclaimer() {
+  return (
+    <footer className="cl-disclaimer" role="note">
+      <span className="cl-disclaimer-tag">Disclaimer</span>
+      <p>
+        This document is model legislative material provided through Precedent
+        for informational and educational purposes only. It is not legal advice
+        and creates no attorney–client relationship. Neither Precedent and its
+        contributors nor the individual or organization presenting this document
+        make any warranty as to the accuracy, completeness, or current validity
+        of any provision, statistic, citation, or bill reference herein, and
+        each disclaims all liability for any reliance placed upon it. All
+        figures are drawn from the cited public sources as of the dates shown
+        and may have changed. Verify every provision, bill number, and data
+        point against current law and official sources, and consult qualified
+        legislative counsel, before filing or distribution.
+      </p>
+    </footer>
+  );
+}
+
 /** Signature block rendered at the foot of one-pagers (screen + print). */
 export function SignatureView({ cfg }: { cfg: LetterheadConfig }) {
   if (!cfg.showSignature) return null;

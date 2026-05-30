@@ -18,6 +18,28 @@ export function render(tpl: string, ctx: Record<string, string>): string {
   );
 }
 
+/**
+ * Format a raw USD figure as compact, human-readable prose ("$2.1 billion",
+ * "$455 billion", "$1.3 trillion"). Used only on exact, sourced trade figures.
+ */
+export function fmtUSDCompact(n: number): string {
+  if (n >= 1e12) return `$${(n / 1e12).toFixed(n >= 1e13 ? 1 : 2)} trillion`;
+  if (n >= 1e9) return `$${(n / 1e9).toFixed(n >= 1e11 ? 0 : 1)} billion`;
+  if (n >= 1e6) return `$${(n / 1e6).toFixed(0)} million`;
+  return `$${Math.round(n).toLocaleString("en-US")}`;
+}
+
+/**
+ * Strip the [[DATA]] chart-slot marker from a template. Charts render only on
+ * screen and in the printed/PDF document; every text export (copy, Markdown,
+ * Word) drops the marker so the prose reads cleanly.
+ */
+export function stripDataMarkers(s: string): string {
+  return s
+    .replace(/^[ \t]*\[\[DATA\]\][ \t]*\n?/gm, "")
+    .replace(/\n{3,}/g, "\n\n");
+}
+
 /** Build the substitution context for a given state + gap. */
 export function buildCtx(report: StateReport, gap: Gap): Record<string, string> {
   const { state } = report;
@@ -31,7 +53,7 @@ export function buildCtx(report: StateReport, gap: Gap): Record<string, string> 
       ? `${precedent.length} state${precedent.length > 1 ? "s have" : " has"} already enacted comparable law: ${oxfordJoin(
           precedent
         )}.`
-      : `No state has yet enacted comparable law — ${state.name} would be first in the nation.`;
+      : `No state has yet enacted comparable law, so ${state.name} would be first in the nation.`;
 
   // Verified per-state indicators (FDIC 2023 / Census 2024). These are only
   // ever surfaced in copy as exact, sourced figures — never estimated.
@@ -55,6 +77,10 @@ export function buildCtx(report: StateReport, gap: Gap): Record<string, string> 
     CRYPTO_SHARE: String(NATIONAL_BENCHMARKS.cryptoOwnership),
     UNEMPLOYMENT: String(demo.unemploymentRate),
     UNEMPLOYMENT_NAT: String(NATIONAL_BENCHMARKS.unemploymentRate),
+    // International goods trade (Census 2024) — exact figures, compact prose.
+    EXPORTS: fmtUSDCompact(demo.exports),
+    IMPORTS: fmtUSDCompact(demo.imports),
+    TRADE_TOTAL: fmtUSDCompact(demo.exports + demo.imports),
   };
 }
 
@@ -71,7 +97,7 @@ export function buildSources(gap: Gap): string {
     : "Verify each citation against the enacting state's official legislature record before filing.";
 
   if (bills.length === 0) {
-    return `\n\n## Sources & precedent\nNo state has yet enacted comparable law, so there is no prior statute to cite — this proposal would be first in the nation. Confirm the current landscape with the National Conference of State Legislatures (NCSL) before filing.\n\nLegislation snapshot: ${LAST_UPDATED}. All text is model legislation for advocacy, not legal advice.`;
+    return `\n\n## Sources & precedent\nNo state has yet enacted comparable law, so there is no prior statute to cite, so this proposal would be first in the nation. Confirm the current landscape with the National Conference of State Legislatures (NCSL) before filing.\n\nLegislation snapshot: ${LAST_UPDATED}. All text is model legislation for advocacy, not legal advice.`;
   }
 
   // gap.precedentStates is derived from the same enacted[] array, in order.
@@ -79,11 +105,11 @@ export function buildSources(gap: Gap): string {
     .map((b, i) => {
       const name = gap.precedentStates[i] ?? b.state;
       const cite = b.sourceUrl ? `[${b.label}](${b.sourceUrl})` : b.label;
-      return `- ${name} — ${cite}`;
+      return `- ${name}, ${cite}`;
     })
     .join("\n");
   const uccMap = isUcc
-    ? `\n- Uniform Law Commission — [UCC Article 12 enactment map](https://www.uniformlaws.org/committees/community-home?CommunityKey=1457c422-ddb7-40b0-8c76-39a1991651ac)`
+    ? `\n- Uniform Law Commission, [UCC Article 12 enactment map](https://www.uniformlaws.org/committees/community-home?CommunityKey=1457c422-ddb7-40b0-8c76-39a1991651ac)`
     : "";
   return `\n\n## Sources & precedent\nThis proposal is modeled on enacted state law. ${verifyNote}\n\n${lines}${uccMap}\n\nLegislation snapshot: ${LAST_UPDATED}. All text is model legislation for advocacy, not legal advice.`;
 }
@@ -101,7 +127,7 @@ export function splitBill(text: string): { caption: string; body: string } {
   return { caption: t.slice(0, idx).trim(), body: t.slice(idx + 2).trim() };
 }
 
-export type DocMode = "onePager" | "formal" | "objections";
+export type DocMode = "coverLetter" | "formal" | "objections";
 
 /**
  * Assemble every gap for a state into one packet: a cover page listing the
@@ -111,14 +137,14 @@ export type DocMode = "onePager" | "formal" | "objections";
 export function buildPackage(report: StateReport, mode: DocMode): string {
   const gaps = report.gaps;
   const kind =
-    mode === "onePager"
-      ? "Legislative Briefing Packet"
+    mode === "coverLetter"
+      ? "Legislative Cover-Letter Packet"
       : mode === "formal"
         ? "Model Bill Packet"
         : "Objection & Rebuttal Packet";
 
   const contents = gaps.map((g, i) => `${i + 1}. ${g.category.name}`).join("\n");
-  const cover = `# ${report.state.name} — ${kind}
+  const cover = `# ${report.state.name}: ${kind}
 
 This packet contains ${gaps.length} proposal${gaps.length === 1 ? "" : "s"} addressing gaps in ${report.state.name}'s pro–digital-asset legislation. Each item is modeled on enacted law from other states and is intended for review by legislative counsel before filing.
 
@@ -129,7 +155,10 @@ Legislation snapshot: ${LAST_UPDATED}.`;
 
   const sections = gaps.map((gap) => {
     const ctx = buildCtx(report, gap);
-    return render(TEMPLATES[gap.category.id][mode], ctx) + buildSources(gap);
+    return (
+      stripDataMarkers(render(TEMPLATES[gap.category.id][mode], ctx)) +
+      buildSources(gap)
+    );
   });
 
   return [cover, ...sections].join("\n\n---\n\n");

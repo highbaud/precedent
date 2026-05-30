@@ -3,16 +3,23 @@ import type { Gap, StateReport } from "../types";
 import type { LetterheadConfig } from "../lib/letterhead";
 import { letterheadMarkdown, signatureMarkdown } from "../lib/letterhead";
 import { TEMPLATES } from "../data/templates";
-import { buildCtx, buildSources, render, splitBill } from "../lib/render";
+import {
+  buildCtx,
+  buildSources,
+  render,
+  splitBill,
+  stripDataMarkers,
+} from "../lib/render";
 import { rarityNote } from "../lib/gaps";
 import { ProposalDoc } from "./ProposalDoc";
 import { BillDoc } from "./BillDoc";
-import { LetterheadView, SignatureView } from "./DocChrome";
+import { DataPanel } from "./DataPanel";
+import { LetterheadView, SignatureView, CoverLetterDisclaimer } from "./DocChrome";
 import { LetterheadEditor } from "./LetterheadEditor";
 import { ExportBar } from "./ExportBar";
 import { ExternalLinkIcon } from "./icons";
 
-type Mode = "onePager" | "formal" | "objections";
+type Mode = "coverLetter" | "formal" | "objections";
 
 interface Props {
   report: StateReport;
@@ -22,7 +29,7 @@ interface Props {
 }
 
 export function ProposalViewer({ report, gap, letterhead, onLetterhead }: Props) {
-  const [mode, setMode] = useState<Mode>("onePager");
+  const [mode, setMode] = useState<Mode>("coverLetter");
   // AI-refined overrides, keyed by "<categoryId>:<mode>"
   const [overrides, setOverrides] = useState<Record<string, string>>({});
 
@@ -41,14 +48,14 @@ export function ProposalViewer({ report, gap, letterhead, onLetterhead }: Props)
 
   const slug = `${report.state.code}-${gap.category.id}-${mode}`.toLowerCase();
   const modeLabel =
-    mode === "onePager"
-      ? "Briefing"
+    mode === "coverLetter"
+      ? "Cover Letter"
       : mode === "formal"
         ? "Model Bill"
         : "Objections & Rebuttals";
   const docTitle = `${report.state.name} — ${gap.category.name} (${modeLabel})`;
 
-  const isOnePager = mode === "onePager";
+  const isCoverLetter = mode === "coverLetter";
   const isFormal = mode === "formal";
   // Formal mode is a filed bill — split off the "AN ACT …" caption from the
   // line-numbered body so BillDoc can lay it out like a real bill.
@@ -59,11 +66,15 @@ export function ProposalViewer({ report, gap, letterhead, onLetterhead }: Props)
   // Letterhead/signature render visually in the doc (screen + print) and are
   // mirrored as text in the exported copy/markdown/Word output. A bill carries
   // its own legislative header, so no advocacy letterhead is attached to it.
+  // The [[DATA]] chart marker is screen/PDF-only, so it is stripped from every
+  // text export.
   const exportText = isFormal
     ? displayText
-    : letterheadMarkdown(letterhead) +
-      displayText +
-      (isOnePager ? signatureMarkdown(letterhead) : "");
+    : stripDataMarkers(
+        letterheadMarkdown(letterhead) +
+          displayText +
+          (isCoverLetter ? signatureMarkdown(letterhead) : "")
+      );
 
   return (
     <section className="proposal">
@@ -74,10 +85,10 @@ export function ProposalViewer({ report, gap, letterhead, onLetterhead }: Props)
         </div>
         <div className="toggle-group" role="tablist">
           <button
-            className={mode === "onePager" ? "on" : ""}
-            onClick={() => setMode("onePager")}
+            className={mode === "coverLetter" ? "on" : ""}
+            onClick={() => setMode("coverLetter")}
           >
-            One-pager
+            Cover letter
           </button>
           <button
             className={mode === "formal" ? "on" : ""}
@@ -161,8 +172,18 @@ export function ProposalViewer({ report, gap, letterhead, onLetterhead }: Props)
       ) : (
         <ProposalDoc
           text={displayText}
+          className={isCoverLetter ? "cover-letter" : "qa-doc"}
+          variant={isCoverLetter ? undefined : "qa"}
+          dataSlot={isCoverLetter ? <DataPanel report={report} /> : null}
           before={<LetterheadView cfg={letterhead} />}
-          after={isOnePager ? <SignatureView cfg={letterhead} /> : null}
+          after={
+            isCoverLetter ? (
+              <>
+                <SignatureView cfg={letterhead} />
+                <CoverLetterDisclaimer />
+              </>
+            ) : null
+          }
         />
       )}
 
@@ -170,7 +191,7 @@ export function ProposalViewer({ report, gap, letterhead, onLetterhead }: Props)
         <LetterheadEditor
           cfg={letterhead}
           onChange={onLetterhead}
-          allowSignature={isOnePager}
+          allowSignature={isCoverLetter}
         />
       )}
 

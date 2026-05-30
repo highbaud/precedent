@@ -1,5 +1,5 @@
 const DISCLAIMER =
-  "DISCLAIMER: This is model legislative text generated for advocacy purposes. It is not legal advice. Verify all provisions against current state statutes and consult qualified legislative counsel before filing.";
+  "DISCLAIMER: This document is model legislative material provided through Precedent for informational and educational purposes only. It is not legal advice and creates no attorney-client relationship. Neither Precedent and its contributors nor the individual or organization presenting this document make any warranty as to the accuracy, completeness, or current validity of any provision, statistic, citation, or bill reference herein, and each disclaims all liability for any reliance placed upon it. Verify every provision, bill number, and data point against current law and official sources, and consult qualified legislative counsel, before filing or distribution.";
 
 function downloadBlob(content: string, mime: string, filename: string): void {
   const blob = new Blob([content], { type: mime });
@@ -58,7 +58,10 @@ export function markdownToHtml(md: string): string {
   };
   for (const raw of lines) {
     const line = raw.trimEnd();
-    if (line === "---") {
+    if (line === "[[DATA]]") {
+      // Chart slot is screen/PDF-only; never appears in text-derived exports.
+      closeList();
+    } else if (line === "---") {
       closeList();
       out.push("<hr>");
     } else if (line.startsWith("# ")) {

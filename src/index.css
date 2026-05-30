@@ -270,7 +270,24 @@ input::placeholder {
   .proposal-doc li,
   .signature,
   .signature-block,
-  .letterhead {
+  .letterhead,
+  .dp-group,
+  .cl-disclaimer {
+    break-inside: avoid;
+  }
+  /* charts and the liability footer must print with their tones/tints */
+  .data-panel,
+  .dp-fill,
+  .cl-disclaimer,
+  .cl-disclaimer-tag,
+  .qa-head,
+  .qa-tag,
+  .qa-body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  /* each objection card stays whole across page breaks */
+  .qa-card {
     break-inside: avoid;
   }
   /* in a full-state package each proposal starts on a fresh page */

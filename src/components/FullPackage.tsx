@@ -22,25 +22,25 @@ interface Props {
 }
 
 const MODES: { id: DocMode; label: string }[] = [
-  { id: "onePager", label: "Briefings" },
+  { id: "coverLetter", label: "Cover letters" },
   { id: "formal", label: "Model bills" },
   { id: "objections", label: "Q&A / Rebuttals" },
 ];
 
 export function FullPackage({ report, letterhead, onLetterhead, onClose }: Props) {
-  const [mode, setMode] = useState<DocMode>("onePager");
+  const [mode, setMode] = useState<DocMode>("coverLetter");
   const [copied, setCopied] = useState(false);
 
   const body = useMemo(() => buildPackage(report, mode), [report, mode]);
-  const isOnePager = mode === "onePager";
+  const isCoverLetter = mode === "coverLetter";
   const text =
     letterheadMarkdown(letterhead) +
     body +
-    (isOnePager ? signatureMarkdown(letterhead) : "");
+    (isCoverLetter ? signatureMarkdown(letterhead) : "");
 
   const kind =
-    mode === "onePager"
-      ? "briefing-packet"
+    mode === "coverLetter"
+      ? "cover-letter-packet"
       : mode === "formal"
         ? "model-bill-packet"
         : "objection-packet";
@@ -86,14 +86,16 @@ export function FullPackage({ report, letterhead, onLetterhead, onClose }: Props
 
       <ProposalDoc
         text={body}
+        className={mode === "objections" ? "qa-doc" : undefined}
+        variant={mode === "objections" ? "qa" : undefined}
         before={<LetterheadView cfg={letterhead} />}
-        after={isOnePager ? <SignatureView cfg={letterhead} /> : null}
+        after={isCoverLetter ? <SignatureView cfg={letterhead} /> : null}
       />
 
       <LetterheadEditor
         cfg={letterhead}
         onChange={onLetterhead}
-        allowSignature={isOnePager}
+        allowSignature={isCoverLetter}
       />
 
       <div className="export-bar">
