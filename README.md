@@ -7,8 +7,11 @@
 <p align="center"><em>Model crypto legislation, built on precedent.</em></p>
 
 <p align="center">
-  A project of the <strong>University of Arkansas Crypto Hogs</strong>, in part by
-  <strong>Max Avery</strong>, Stand With Crypto chapter president, Arkansas.
+  A project of the <strong><a href="https://www.instagram.com/uarkcryptohogs/">University of Arkansas Crypto Hogs</a></strong>,
+  in part by <strong>Max Avery</strong>
+  (<a href="https://x.com/realmaxavery">X</a> ·
+  <a href="https://www.linkedin.com/in/max-avery">LinkedIn</a>),
+  Stand With Crypto chapter president, Arkansas.
 </p>
 
 ---
@@ -157,6 +160,9 @@ this area changes quickly.
 ---
 
 <p align="center">
-  A project of the University of Arkansas Crypto Hogs, in part by Max Avery,
+  A project of the <a href="https://www.instagram.com/uarkcryptohogs/">University of Arkansas Crypto Hogs</a>,
+  in part by Max Avery
+  (<a href="https://x.com/realmaxavery">X</a> ·
+  <a href="https://www.linkedin.com/in/max-avery">LinkedIn</a>),
   Stand With Crypto chapter president, Arkansas.
 </p>
