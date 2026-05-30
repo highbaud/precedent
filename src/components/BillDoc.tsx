@@ -1,4 +1,4 @@
-import { renderBlocks } from "./ProposalDoc";
+import { renderBlocks } from "./renderDoc";
 
 interface Props {
   /** Full state name, e.g. "California". */
