@@ -190,10 +190,8 @@ input::placeholder {
   .contacts,
   .proposal-head,
   .export-bar,
-  .refined-banner,
   .lh-editor,
-  .appfoot,
-  .settings-overlay {
+  .appfoot {
     display: none !important;
   }
   html,

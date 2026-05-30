@@ -19,7 +19,6 @@ import { ProposalViewer } from "./components/ProposalViewer";
 import { FullPackage } from "./components/FullPackage";
 import { ContactsPanel } from "./components/ContactsPanel";
 import { OrganizationsPanel } from "./components/OrganizationsPanel";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { NetworkIcon } from "./components/icons";
 
 type Theme = "light" | "dark";
@@ -30,7 +29,6 @@ export default function App() {
   const [showPackage, setShowPackage] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
   const [showOrgs, setShowOrgs] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem("precedent.theme") as Theme) || "light"
   );
@@ -98,9 +96,6 @@ export default function App() {
             title="Toggle light / dark"
           >
             {theme === "light" ? "◐ Dark" : "◐ Light"}
-          </button>
-          <button className="ghost" onClick={() => setShowSettings(true)}>
-            Settings
           </button>
         </div>
       </header>
@@ -229,7 +224,7 @@ export default function App() {
             <p className="appfoot-credit">
               A project of the{" "}
               <strong>University of Arkansas Crypto Hogs</strong>, in part by{" "}
-              <strong>Max Avery</strong>, Stand With Crypto chapter president,
+              <strong>Max Avery</strong>, Stand With Crypto Chapter President,
               Arkansas.
             </p>
           </div>
@@ -280,8 +275,6 @@ export default function App() {
           </span>
         </div>
       </footer>
-
-      {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
     </div>
   );
 }

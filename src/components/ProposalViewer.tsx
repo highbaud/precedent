@@ -30,19 +30,14 @@ interface Props {
 
 export function ProposalViewer({ report, gap, letterhead, onLetterhead }: Props) {
   const [mode, setMode] = useState<Mode>("coverLetter");
-  // AI-refined overrides, keyed by "<categoryId>:<mode>"
-  const [overrides, setOverrides] = useState<Record<string, string>>({});
 
   const ctx = useMemo(() => buildCtx(report, gap), [report, gap]);
-  const baseText = useMemo(
+  const bodyText = useMemo(
     () => render(TEMPLATES[gap.category.id][mode], ctx),
     [gap.category.id, mode, ctx]
   );
 
-  const overrideKey = `${gap.category.id}:${mode}`;
-  const refined = overrides[overrideKey];
-  // Refinable body (no citations) vs. full display text (citations appended).
-  const bodyText = refined ?? baseText;
+  // Body (no citations) vs. full display text (citations appended).
   const sources = useMemo(() => buildSources(gap), [gap]);
   const displayText = bodyText + sources;
 
@@ -143,24 +138,6 @@ export function ProposalViewer({ report, gap, letterhead, onLetterhead }: Props)
         </div>
       )}
 
-      {refined && (
-        <div className="refined-banner">
-          ✦ AI-refined draft.{" "}
-          <button
-            className="ghost"
-            onClick={() =>
-              setOverrides((o) => {
-                const next = { ...o };
-                delete next[overrideKey];
-                return next;
-              })
-            }
-          >
-            Revert to template
-          </button>
-        </div>
-      )}
-
       {isFormal ? (
         <BillDoc
           state={report.state.name}
@@ -195,14 +172,7 @@ export function ProposalViewer({ report, gap, letterhead, onLetterhead }: Props)
         />
       )}
 
-      <ExportBar
-        text={exportText}
-        refineText={bodyText}
-        filename={slug}
-        docTitle={docTitle}
-        refineContext={docTitle}
-        onRefined={(t) => setOverrides((o) => ({ ...o, [overrideKey]: t }))}
-      />
+      <ExportBar text={exportText} filename={slug} docTitle={docTitle} />
     </section>
   );
 }

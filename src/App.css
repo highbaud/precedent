@@ -721,17 +721,6 @@ button.ghost.sm {
   font-size: var(--text-xs);
   color: var(--color-faint);
 }
-.refined-banner {
-  background: var(--color-accent-dim);
-  color: var(--color-accent);
-  border-radius: var(--radius-sm);
-  padding: var(--space-sm) var(--space-md);
-  font-size: var(--text-sm);
-  margin-bottom: var(--space-lg);
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-}
 
 /* "Modeled on enacted law" precedent strip — clickable bill links */
 .precedent-strip {
@@ -1343,44 +1332,6 @@ a.precedent-pill:hover .pp-ext {
 }
 .export-status.error {
   color: var(--color-down);
-}
-
-/* ——————————————————— settings ——————————————————— */
-.settings-overlay {
-  position: fixed;
-  inset: 0;
-  background: oklch(0% 0 0 / 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-xl);
-  z-index: 100;
-}
-.settings-panel {
-  background: var(--color-panel);
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  width: 100%;
-  max-width: 460px;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-  box-shadow: var(--shadow-pop);
-}
-.settings-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.settings-warn {
-  font-size: var(--text-xs);
-  color: var(--color-warn);
-  background: var(--color-warn-dim);
-  padding: var(--space-md);
-  border-radius: var(--radius-sm);
-  line-height: 1.5;
-  margin: 0;
 }
 
 /* ——————————————————— letterhead editor ——————————————————— */

@@ -86,8 +86,8 @@ export function buildCtx(report: StateReport, gap: Gap): Record<string, string> 
 
 /**
  * Build an exportable "Sources & precedent" section citing every enacted bill
- * this proposal is modeled on. Kept separate from the refinable body so the
- * citations are never altered by AI refine and always travel with every export.
+ * this proposal is modeled on. Kept separate from the body so the citations
+ * always travel with every export.
  */
 export function buildSources(gap: Gap): string {
   const bills = gap.category.enacted;

@@ -11,7 +11,7 @@
   in part by <strong>Max Avery</strong>
   (<a href="https://x.com/realmaxavery">X</a> ·
   <a href="https://www.linkedin.com/in/max-avery">LinkedIn</a>),
-  Stand With Crypto chapter president, Arkansas.
+  Stand With Crypto Chapter President, Arkansas.
 </p>
 
 ---
@@ -110,10 +110,6 @@ enacted list.
 - **Export** (`src/lib/export.ts`): copy to clipboard, Print / Save-as-PDF via a print
   stylesheet, Markdown, and Word (.doc). The chart slot marker is screen and PDF only and
   is stripped from every text export.
-- **Optional AI refine** (`src/lib/refine.ts`): the curated draft is always the base and
-  the fallback. You can add an Anthropic API key in Settings to tighten wording. The key
-  is stored only in this browser's localStorage and sent directly to Anthropic. That is
-  fine for personal, single-user use and **not** appropriate for a shared deployment.
 
 ## Tech stack
 
@@ -136,7 +132,7 @@ The build in `dist/` is a static site. Deploy it to any static host.
 ```
 src/
   data/        legislation, templates, demographics, states
-  lib/         gaps, render, export, refine, letterhead
+  lib/         gaps, render, export, letterhead
   components/  StateSelector, GapDashboard, ProposalViewer,
                ProposalDoc, BillDoc, DataPanel, FullPackage, ...
   App.tsx      state + layout
@@ -164,5 +160,5 @@ this area changes quickly.
   in part by Max Avery
   (<a href="https://x.com/realmaxavery">X</a> ·
   <a href="https://www.linkedin.com/in/max-avery">LinkedIn</a>),
-  Stand With Crypto chapter president, Arkansas.
+  Stand With Crypto Chapter President, Arkansas.
 </p>
