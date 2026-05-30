@@ -1,0 +1,107 @@
+/* Precedent · design tokens
+ * Default theme: LIGHT — "official paper" — warm-white surfaces, ink-black text,
+ *   a confident navy accent. Dark theme available via [data-theme="dark"].
+ * Type: Fraunces (display serif) + Spectral (document body serif) + Inter (UI) + JetBrains Mono.
+ */
+:root {
+  /* —— surfaces (light, layered) —— */
+  --color-bg: oklch(97.5% 0.004 255);
+  --color-panel: oklch(100% 0 0);
+  --color-panel-2: oklch(98% 0.004 255);
+  --color-panel-3: oklch(95% 0.006 255);
+
+  /* —— hairlines —— */
+  --color-line: oklch(89% 0.006 255);
+  --color-line-faint: oklch(93.5% 0.005 255);
+
+  /* —— text (ink) —— */
+  --color-text: oklch(27% 0.02 260);
+  --color-muted: oklch(46% 0.018 260);
+  --color-faint: oklch(60% 0.014 260);
+
+  /* —— accents —— */
+  --color-accent: oklch(47% 0.13 255);
+  --color-accent-dim: oklch(47% 0.13 255 / 0.10);
+  --color-up: oklch(50% 0.13 150);
+  --color-up-dim: oklch(50% 0.13 150 / 0.12);
+  --color-down: oklch(53% 0.2 25);
+  --color-down-dim: oklch(53% 0.2 25 / 0.12);
+  --color-warn: oklch(50% 0.11 65);
+  --color-warn-dim: oklch(82% 0.09 78 / 0.45);
+  --color-focus: oklch(55% 0.14 255);
+
+  /* button.primary ink color (text on accent) */
+  --color-on-accent: oklch(100% 0 0);
+
+  /* —— type —— */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+  --font-serif: "Spectral", Georgia, "Times New Roman", serif;
+
+  --text-xs: 0.6875rem; /* 11 */
+  --text-sm: 0.8125rem; /* 13 */
+  --text-base: 0.9375rem; /* 15 */
+  --text-lg: 1.125rem; /* 18 */
+  --text-xl: 1.5rem; /* 24 */
+  --text-2xl: 2rem; /* 32 */
+  --text-3xl: 2.75rem; /* 44 */
+
+  /* —— 4pt spacing scale —— */
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+
+  /* —— radii —— */
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* —— motion —— */
+  --dur-fast: 110ms;
+  --dur-mid: 200ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* —— elevation —— */
+  --shadow-panel: 0 1px 2px oklch(0% 0 0 / 0.05), 0 1px 3px oklch(0% 0 0 / 0.04);
+  --shadow-pop: 0 12px 40px oklch(30% 0.03 260 / 0.18);
+  --shadow-paper: 0 1px 1px oklch(0% 0 0 / 0.04), 0 8px 30px oklch(30% 0.03 260 / 0.10);
+}
+
+/* —— optional dark theme —— */
+[data-theme="dark"] {
+  --color-bg: oklch(15% 0.012 260);
+  --color-panel: oklch(19% 0.013 260);
+  --color-panel-2: oklch(23% 0.015 260);
+  --color-panel-3: oklch(27% 0.016 260);
+
+  --color-line: oklch(31% 0.014 260);
+  --color-line-faint: oklch(25% 0.012 260);
+
+  --color-text: oklch(94% 0.008 260);
+  --color-muted: oklch(70% 0.014 260);
+  --color-faint: oklch(55% 0.013 260);
+
+  --color-accent: oklch(72% 0.13 245);
+  --color-accent-dim: oklch(72% 0.13 245 / 0.14);
+  --color-up: oklch(74% 0.16 152);
+  --color-up-dim: oklch(74% 0.16 152 / 0.14);
+  --color-down: oklch(68% 0.19 25);
+  --color-down-dim: oklch(68% 0.19 25 / 0.14);
+  --color-warn: oklch(80% 0.13 80);
+  --color-warn-dim: oklch(80% 0.13 80 / 0.14);
+  --color-focus: oklch(80% 0.12 245);
+
+  --color-on-accent: oklch(18% 0.02 260);
+
+  --shadow-panel: 0 1px 2px oklch(0% 0 0 / 0.4);
+  --shadow-pop: 0 8px 28px oklch(0% 0 0 / 0.5);
+  --shadow-paper: 0 1px 2px oklch(0% 0 0 / 0.4);
+}
