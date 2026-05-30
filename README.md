@@ -31,8 +31,7 @@ from it: every model bill, cover letter, and rebuttal is anchored to real statut
 legislators can look up and verify.
 
 It runs entirely in the browser. There is no backend, no account, and no data leaves the
-page unless you opt into the AI-refine feature. The production build is a static site you
-can host anywhere.
+page. The production build is a static site you can host anywhere.
 
 ## What it produces
 
